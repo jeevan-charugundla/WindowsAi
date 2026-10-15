@@ -36,9 +36,6 @@ Guide Me is intentionally NOT a chat feature: AI prose can never leak into the c
 
 If the requested element genuinely isn't visible, the AI returns `target: null` with a short honest instruction — it is never allowed to guess a location.
 
-## 🖥️ Screenshots
-
-> TODO: add a screenshot of the chat window and a Guide Me overlay highlighting a menu item.
 
 ## 🏗️ Architecture
 
