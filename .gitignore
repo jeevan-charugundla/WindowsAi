@@ -1,0 +1,23 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Build output
+**/bin/
+**/obj/
+
+# Node dependencies
+**/node_modules/
+
+# Tooling / local agent state
+.agents/
+.freebuff/
+.kilo/
+.vs/
+.vscode/
+.idea/
+TestResults/
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,137 @@
+﻿<Window x:Class="WindowsAICompanion.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WindowsAICompanion.Desktop"
+        xmlns:mdxaml="clr-namespace:MdXaml;assembly=MdXaml"
+        mc:Ignorable="d"
+        Title="Windows AI Companion" Height="520" Width="820"
+        MinHeight="420" MinWidth="620">
+
+    <Window.Resources>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             User message template — plain text, right-aligned blue bubble
+             ═══════════════════════════════════════════════════════════ -->
+        <DataTemplate x:Key="UserMessageTemplate" DataType="{x:Type local:ChatMessage}">
+            <Border Background="#DCEBFA" Padding="12" MaxWidth="560" CornerRadius="6">
+                <StackPanel>
+                    <TextBlock Text="{Binding Speaker}"
+                               FontWeight="SemiBold"
+                               Foreground="DimGray" />
+                    <TextBlock Margin="0,5,0,0"
+                               Text="{Binding Content}"
+                               TextWrapping="Wrap"
+                               FontSize="14" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Assistant message template — Markdown rendered via MdXaml
+             ═══════════════════════════════════════════════════════════ -->
+        <DataTemplate x:Key="AssistantMessageTemplate" DataType="{x:Type local:ChatMessage}">
+            <Border Background="#EEEEEE" Padding="12" MaxWidth="680" CornerRadius="6">
+                <StackPanel>
+                    <TextBlock Text="{Binding Speaker}"
+                               FontWeight="SemiBold"
+                               Foreground="DimGray"
+                               Margin="0,0,0,4" />
+
+                    <!--
+                        MarkdownScrollViewer renders the AI response as rich Markdown.
+                        - VerticalScrollBarVisibility="Disabled" lets the outer ChatScrollViewer scroll
+                        - HorizontalScrollBarVisibility="Disabled" prevents horizontal overflow on normal text
+                        - UseLayoutRounding="True" sharpens text
+                    -->
+                    <mdxaml:MarkdownScrollViewer
+                        Markdown="{Binding Content}"
+                        VerticalScrollBarVisibility="Disabled"
+                        HorizontalScrollBarVisibility="Auto"
+                        UseLayoutRounding="True"
+                        MinWidth="200"
+                        FontSize="14"
+                        FontFamily="Segoe UI"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="0" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Template selector
+             ═══════════════════════════════════════════════════════════ -->
+        <local:ChatMessageTemplateSelector
+            x:Key="MessageTemplateSelector"
+            UserTemplate="{StaticResource UserMessageTemplate}"
+            AssistantTemplate="{StaticResource AssistantMessageTemplate}" />
+
+    </Window.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Windows AI Companion" FontSize="24" FontWeight="SemiBold" />
+
+        <ScrollViewer x:Name="ChatScrollViewer"
+                      Grid.Row="1"
+                      Margin="0,18,0,16"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl x:Name="ConversationItemsControl"
+                          ItemTemplateSelector="{StaticResource MessageTemplateSelector}">
+                <ItemsControl.ItemContainerStyle>
+                    <Style TargetType="ContentPresenter">
+                        <Setter Property="Margin" Value="0,0,0,10" />
+                        <Setter Property="HorizontalAlignment" Value="Left" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Role}" Value="user">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="QuestionTextBox" Grid.Column="0" MinHeight="64" Padding="10"
+                     AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                     KeyDown="QuestionTextBox_KeyDown" />
+            <Button x:Name="MicButton" Grid.Column="1" Margin="8,0,0,0" Width="42" Height="42"
+                    VerticalAlignment="Bottom"
+                    FontSize="18"
+                    Content="🎙"
+                    Click="MicButton_Click"
+                    AutomationProperties.Name="Start voice input"
+                    ToolTip="Speak (click to start/stop recording)" />
+            <Button x:Name="SendButton" Grid.Column="2" Margin="8,0,0,0" Padding="18,8"
+                    VerticalAlignment="Bottom"
+                    Content="Send" Click="SendButton_Click" />
+        </Grid>
+
+        <DockPanel Grid.Row="3" Margin="0,12,0,0">
+            <TextBlock x:Name="StatusTextBlock" Text="Ready" Foreground="DimGray" VerticalAlignment="Center" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                <Button x:Name="AnalyzeScreenButton" Margin="8,0,0,0" Padding="14,7"
+                        Content="Analyze Screen" Click="AnalyzeScreenButton_Click" />
+                <Button x:Name="VisualTeacherButton" Margin="8,0,0,0" Padding="14,7"
+                    Content="Guide Me" Click="VisualTeacherButton_Click" />
+                <Button x:Name="ClearChatButton" Margin="8,0,0,0" Padding="14,7"
+                        Content="Clear Chat" Click="ClearChatButton_Click" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

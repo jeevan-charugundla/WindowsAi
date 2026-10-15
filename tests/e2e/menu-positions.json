@@ -1,0 +1,50 @@
+﻿{
+    "Insert":  {
+                   "y":  24,
+                   "width":  70,
+                   "height":  44,
+                   "x":  200
+               },
+    "Close":  {
+                  "y":  16,
+                  "width":  48,
+                  "height":  36,
+                  "x":  1840
+              },
+    "Format":  {
+                   "y":  24,
+                   "width":  83,
+                   "height":  44,
+                   "x":  302
+               },
+    "View":  {
+                 "y":  24,
+                 "width":  63,
+                 "height":  44,
+                 "x":  105
+             },
+    "Help":  {
+                 "y":  24,
+                 "width":  62,
+                 "height":  44,
+                 "x":  640
+             },
+    "Window":  {
+                   "y":  24,
+                   "width":  93,
+                   "height":  44,
+                   "x":  516
+               },
+    "Tools":  {
+                  "y":  24,
+                  "width":  68,
+                  "height":  44,
+                  "x":  416
+              },
+    "File":  {
+                 "y":  24,
+                 "width":  51,
+                 "height":  44,
+                 "x":  22
+             }
+}
